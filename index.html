@@ -1,0 +1,526 @@
+            <!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#faf7ff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Lumi — Personal Productivity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Splash Screen -->
+<div class="splash-screen" id="splashScreen">
+  <div class="splash-logo">
+    <div class="splash-mark"><i class="fa-solid fa-asterisk"></i></div>
+    <div class="splash-text">Lumi</div>
+  </div>
+  <div class="splash-loader"><div class="splash-loader-bar"></div></div>
+</div>
+
+<!-- App Container -->
+<div class="app" id="app">
+
+  <!-- HOME -->
+  <section class="page page-home active" id="page-home">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="avatar-btn" onclick="navigate('profile')">
+          <img id="homeAvatar" src="" alt="avatar">
+        </button>
+        <div class="greeting">
+          <div class="greeting-hello" id="greetingHello">Good Morning</div>
+          <div class="greeting-name" id="greetingName">User</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" onclick="openSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="icon-btn" onclick="showToast('No new notifications', 'fa-bell')">
+          <i class="fa-regular fa-bell"></i>
+          <span class="dot-badge"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="page-scroll">
+      <div class="hero-card">
+        <div class="hero-bg-shape shape-1"></div>
+        <div class="hero-bg-shape shape-2"></div>
+        <div class="hero-bg-shape shape-3"></div>
+        <div class="hero-content">
+          <div class="hero-label">Today's Focus</div>
+          <h2 class="hero-title">Mastering projects<br>with management</h2>
+          <p class="hero-subtitle">Your task almost done, keep it up!</p>
+          <div class="hero-progress-row">
+            <div class="hero-progress-info">
+              <div class="hero-progress-value" id="heroProgressValue">0%</div>
+              <div class="hero-progress-label">Completed</div>
+            </div>
+            <div class="hero-ring" id="heroRing">
+              <svg viewBox="0 0 100 100">
+                <circle class="ring-bg" cx="50" cy="50" r="42"></circle>
+                <circle class="ring-fill" cx="50" cy="50" r="42" id="heroRingFill"></circle>
+              </svg>
+              <div class="hero-ring-center"><i class="fa-solid fa-bolt"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-deco">
+          <div class="deco-star"><i class="fa-solid fa-star"></i></div>
+          <div class="deco-spark"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        </div>
+      </div>
+
+      <div class="quick-stats">
+        <div class="qs-card qs-lavender">
+          <div class="qs-icon"><i class="fa-solid fa-list-check"></i></div>
+          <div class="qs-num" id="qsTotal">0</div>
+          <div class="qs-label">Total Tasks</div>
+        </div>
+        <div class="qs-card qs-cyan">
+          <div class="qs-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="qs-num" id="qsDone">0</div>
+          <div class="qs-label">Completed</div>
+        </div>
+        <div class="qs-card qs-yellow">
+          <div class="qs-icon"><i class="fa-solid fa-fire"></i></div>
+          <div class="qs-num" id="qsStreak">0</div>
+          <div class="qs-label">Day Streak</div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h3>Your Task</h3>
+        <button class="link-btn" onclick="navigate('tasks')">See all</button>
+      </div>
+      <div class="filter-pills" id="homeFilters">
+        <button class="pill active" data-filter="all">All</button>
+        <button class="pill" data-filter="today">Today</button>
+        <button class="pill" data-filter="upcoming">Upcoming</button>
+        <button class="pill" data-filter="priority">High Priority</button>
+      </div>
+
+      <div class="task-list" id="homeTaskList"></div>
+      <div class="bottom-spacer"></div>
+    </div>
+  </section>
+
+  <!-- TASKS -->
+  <section class="page page-tasks" id="page-tasks">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="page-title">My Tasks</div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" onclick="openSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="icon-btn" onclick="toggleSortMenu()"><i class="fa-solid fa-arrow-down-wide-short"></i></button>
+      </div>
+    </header>
+
+    <div class="page-scroll">
+      <div class="filter-pills scrollable" id="taskFilters">
+        <button class="pill active" data-filter="all">All</button>
+        <button class="pill" data-filter="today">Today</button>
+        <button class="pill" data-filter="upcoming">Upcoming</button>
+        <button class="pill" data-filter="completed">Completed</button>
+        <button class="pill" data-filter="priority">High Priority</button>
+        <button class="pill" data-filter="low">Low Priority</button>
+      </div>
+
+      <div class="task-list grouped" id="taskList"></div>
+      <div class="empty-state" id="taskEmpty" style="display:none;">
+        <div class="empty-icon"><i class="fa-regular fa-folder-open"></i></div>
+        <div class="empty-title">No tasks yet</div>
+        <div class="empty-subtitle">Tap the + button to create your first task</div>
+      </div>
+      <div class="bottom-spacer"></div>
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section class="page page-calendar" id="page-calendar">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="page-title">Calendar</div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" onclick="prevMonth()"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="icon-btn" onclick="nextMonth()"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </header>
+
+    <div class="page-scroll">
+      <div class="calendar-card">
+        <div class="cal-header">
+          <div class="cal-month" id="calMonth">November 2025</div>
+          <div class="cal-year" id="calYear"></div>
+        </div>
+        <div class="cal-weekdays">
+          <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+
+      <div class="section-head">
+        <h3 id="agendaTitle">Today's Agenda</h3>
+        <span class="count-pill" id="agendaCount">0</span>
+      </div>
+      <div class="task-list" id="agendaList"></div>
+      <div class="empty-state" id="agendaEmpty" style="display:none;">
+        <div class="empty-icon"><i class="fa-regular fa-calendar"></i></div>
+        <div class="empty-title">No tasks for this day</div>
+        <div class="empty-subtitle">Enjoy your free time or plan something new</div>
+      </div>
+      <div class="bottom-spacer"></div>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section class="page page-profile" id="page-profile">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="page-title">Profile</div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" onclick="navigate('settings')"><i class="fa-solid fa-gear"></i></button>
+        <button class="icon-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
+      </div>
+    </header>
+
+    <div class="page-scroll">
+      <div class="profile-header-card">
+        <div class="phc-pattern"></div>
+        <div class="phc-content">
+          <div class="profile-avatar-wrap">
+            <img class="profile-avatar" id="profileAvatar" src="" alt="avatar">
+            <button class="avatar-edit-btn" onclick="changeAvatar()"><i class="fa-solid fa-camera"></i></button>
+          </div>
+          <div class="profile-name-row">
+            <h2 id="profileName">User</h2>
+            <button class="verified-badge" aria-label="Verified"><i class="fa-solid fa-check"></i></button>
+          </div>
+          <div class="profile-username" id="profileUsername">@username</div>
+          <div class="profile-bio" id="profileBio">Welcome to Lumi! Edit your profile to get started.</div>
+
+          <div class="profile-stats">
+            <div class="ps-item">
+              <div class="ps-num" id="psLevel">1</div>
+              <div class="ps-label">Level</div>
+            </div>
+            <div class="ps-divider"></div>
+            <div class="ps-item">
+              <div class="ps-num" id="psDone">0</div>
+              <div class="ps-label">Done</div>
+            </div>
+            <div class="ps-divider"></div>
+            <div class="ps-item">
+              <div class="ps-num" id="psScore">0</div>
+              <div class="ps-label">Score</div>
+            </div>
+            <div class="ps-divider"></div>
+            <div class="ps-item">
+              <div class="ps-num" id="psStreak">0</div>
+              <div class="ps-label">Streak</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head"><h3>Achievements</h3></div>
+      <div class="badge-row">
+        <div class="badge-item b-purple">
+          <div class="badge-icon"><i class="fa-solid fa-trophy"></i></div>
+          <div class="badge-name">First Win</div>
+        </div>
+        <div class="badge-item b-cyan">
+          <div class="badge-icon"><i class="fa-solid fa-rocket"></i></div>
+          <div class="badge-name">Rocket</div>
+        </div>
+        <div class="badge-item b-yellow">
+          <div class="badge-icon"><i class="fa-solid fa-fire"></i></div>
+          <div class="badge-name">7-Day Streak</div>
+        </div>
+        <div class="badge-item b-lavender">
+          <div class="badge-icon"><i class="fa-solid fa-crown"></i></div>
+          <div class="badge-name">Master</div>
+        </div>
+      </div>
+
+      <div class="section-head"><h3>Account</h3></div>
+      <div class="menu-list">
+        <button class="menu-item" onclick="openEditProfile()">
+          <div class="mi-icon mi-lavender"><i class="fa-solid fa-user"></i></div>
+          <div class="mi-text">
+            <div class="mi-title">Edit Profile</div>
+            <div class="mi-subtitle">Update your personal information</div>
+          </div>
+          <i class="fa-solid fa-chevron-right mi-arrow"></i>
+        </button>
+        <button class="menu-item" onclick="navigate('settings')">
+          <div class="mi-icon mi-cyan"><i class="fa-solid fa-palette"></i></div>
+          <div class="mi-text">
+            <div class="mi-title">Appearance</div>
+            <div class="mi-subtitle">Theme, colors & font</div>
+          </div>
+          <i class="fa-solid fa-chevron-right mi-arrow"></i>
+        </button>
+        <button class="menu-item" onclick="navigate('settings')">
+          <div class="mi-icon mi-yellow"><i class="fa-solid fa-bell"></i></div>
+          <div class="mi-text">
+            <div class="mi-title">Notifications</div>
+            <div class="mi-subtitle">Manage your reminders</div>
+          </div>
+          <i class="fa-solid fa-chevron-right mi-arrow"></i>
+        </button>
+        <button class="menu-item" onclick="navigate('settings')">
+          <div class="mi-icon mi-purple"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="mi-text">
+            <div class="mi-title">Privacy</div>
+            <div class="mi-subtitle">Data & security settings</div>
+          </div>
+          <i class="fa-solid fa-chevron-right mi-arrow"></i>
+        </button>
+      </div>
+      <div class="bottom-spacer"></div>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="page page-settings" id="page-settings">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn" onclick="navigate('profile')"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="page-title">Settings</div>
+      </div>
+    </header>
+
+    <div class="page-scroll">
+      <div class="settings-group">
+        <div class="settings-group-label">Account</div>
+        <div class="menu-list">
+          <button class="menu-item" onclick="openEditProfile()">
+            <div class="mi-icon mi-lavender"><i class="fa-solid fa-user"></i></div>
+            <div class="mi-text"><div class="mi-title">Edit Profile</div></div>
+            <i class="fa-solid fa-chevron-right mi-arrow"></i>
+          </button>
+          <button class="menu-item" onclick="changeAvatar()">
+            <div class="mi-icon mi-cyan"><i class="fa-solid fa-image"></i></div>
+            <div class="mi-text"><div class="mi-title">Change Photo</div></div>
+            <i class="fa-solid fa-chevron-right mi-arrow"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-label">Appearance</div>
+        <div class="menu-list">
+          <div class="menu-item no-click">
+            <div class="mi-icon mi-purple"><i class="fa-solid fa-moon"></i></div>
+            <div class="mi-text"><div class="mi-title">Dark Mode</div></div>
+            <label class="switch">
+              <input type="checkbox" id="darkToggle" onchange="toggleTheme()">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <button class="menu-item" onclick="cycleAccent()">
+            <div class="mi-icon mi-yellow"><i class="fa-solid fa-palette"></i></div>
+            <div class="mi-text"><div class="mi-title">Accent Color</div><div class="mi-subtitle" id="accentName">Lavender</div></div>
+            <div class="accent-preview" id="accentPreview"></div>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-label">Data</div>
+        <div class="menu-list">
+          <button class="menu-item" onclick="exportData()">
+            <div class="mi-icon mi-cyan"><i class="fa-solid fa-download"></i></div>
+            <div class="mi-text"><div class="mi-title">Export Data</div></div>
+            <i class="fa-solid fa-chevron-right mi-arrow"></i>
+          </button>
+          <button class="menu-item danger" onclick="resetData()">
+            <div class="mi-icon mi-red"><i class="fa-solid fa-trash"></i></div>
+            <div class="mi-text"><div class="mi-title">Reset All Data</div></div>
+            <i class="fa-solid fa-chevron-right mi-arrow"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-group-label">About</div>
+        <div class="menu-list">
+          <button class="menu-item" onclick="showAbout()">
+            <div class="mi-icon mi-purple"><i class="fa-solid fa-info"></i></div>
+            <div class="mi-text"><div class="mi-title">About Lumi</div></div>
+            <i class="fa-solid fa-chevron-right mi-arrow"></i>
+          </button>
+        </div>
+        <div class="version-tag">Lumi v1.0.0 • Made with care</div>
+      </div>
+      <div class="bottom-spacer"></div>
+    </div>
+  </section>
+
+  <!-- TASK DETAIL -->
+  <section class="page page-detail" id="page-detail">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn" onclick="closeDetail()"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="page-title">Task Detail</div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" onclick="editCurrentTask()"><i class="fa-solid fa-pen"></i></button>
+        <button class="icon-btn" onclick="deleteCurrentTask()"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </header>
+    <div class="page-scroll" id="detailContent"></div>
+  </section>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="nav-item active" data-nav="home" onclick="navigate('home')">
+      <i class="fa-solid fa-house"></i><span>Home</span>
+    </button>
+    <button class="nav-item" data-nav="tasks" onclick="navigate('tasks')">
+      <i class="fa-solid fa-list-check"></i><span>Tasks</span>
+    </button>
+    <button class="nav-fab" onclick="openCreateTask()" aria-label="Create task">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+    <button class="nav-item" data-nav="calendar" onclick="navigate('calendar')">
+      <i class="fa-regular fa-calendar"></i><span>Calendar</span>
+    </button>
+    <button class="nav-item" data-nav="profile" onclick="navigate('profile')">
+      <i class="fa-regular fa-user"></i><span>Profile</span>
+    </button>
+  </nav>
+</div>
+
+<!-- CREATE/EDIT TASK MODAL -->
+<div class="sheet-overlay" id="taskSheetOverlay">
+  <div class="bottom-sheet" id="taskSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <h3 id="sheetTitle">Create Task</h3>
+      <button class="icon-btn" onclick="closeCreateTask()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="sheet-body">
+      <div class="form-group">
+        <label>Task Title</label>
+        <input type="text" id="taskTitle" placeholder="What do you need to do?">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="taskDesc" rows="2" placeholder="Add more details..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Priority</label>
+        <div class="priority-picker" id="priorityPicker">
+          <button class="pp-btn active" data-p="low"><span class="pp-dot pp-low"></span>Low</button>
+          <button class="pp-btn" data-p="medium"><span class="pp-dot pp-medium"></span>Medium</button>
+          <button class="pp-btn" data-p="high"><span class="pp-dot pp-high"></span>High</button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Deadline</label>
+          <input type="date" id="taskDeadline">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="taskCategory">
+            <option value="Work">Work</option>
+            <option value="Design">Design</option>
+            <option value="Personal">Personal</option>
+            <option value="Study">Study</option>
+            <option value="Health">Health</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Progress: <span id="progressValue">0</span>%</label>
+        <input type="range" min="0" max="100" value="0" id="taskProgress" oninput="document.getElementById('progressValue').innerText=this.value">
+      </div>
+      <div class="form-group">
+        <label>Checklist</label>
+        <div class="checklist-editor" id="checklistEditor"></div>
+        <button class="add-checklist-btn" onclick="addChecklistItem()"><i class="fa-solid fa-plus"></i> Add item</button>
+      </div>
+    </div>
+    <div class="sheet-footer">
+      <button class="btn-secondary" onclick="closeCreateTask()">Cancel</button>
+      <button class="btn-primary" id="saveTaskBtn" onclick="saveTask()">Create Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="sheet-overlay" id="profileSheetOverlay">
+  <div class="bottom-sheet" id="profileSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <h3>Edit Profile</h3>
+      <button class="icon-btn" onclick="closeEditProfile()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="sheet-body">
+      <div class="profile-edit-avatar">
+        <img id="editAvatarPreview" src="" alt="avatar">
+        <button class="avatar-edit-btn" onclick="changeAvatar()"><i class="fa-solid fa-camera"></i></button>
+      </div>
+      <div class="form-group">
+        <label>Display Name</label>
+        <input type="text" id="editName" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="editUsername" placeholder="@username">
+      </div>
+      <div class="form-group">
+        <label>Bio</label>
+        <textarea id="editBio" rows="3" placeholder="Tell about yourself..."></textarea>
+      </div>
+    </div>
+    <div class="sheet-footer">
+      <button class="btn-secondary" onclick="closeEditProfile()">Cancel</button>
+      <button class="btn-primary" onclick="saveProfile()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div class="sheet-overlay" id="searchOverlay">
+  <div class="search-sheet">
+    <div class="search-header">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Search tasks, goals..." oninput="performSearch()" autofocus>
+      <button class="icon-btn" onclick="closeSearch()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- TOAST & CONFIRM -->
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-dialog">
+    <div class="confirm-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmMessage">This action cannot be undone.</p>
+    <div class="confirm-actions">
+      <button class="btn-secondary" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-danger" id="confirmOkBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
